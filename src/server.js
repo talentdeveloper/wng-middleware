@@ -1,8 +1,14 @@
 require('babel-polyfill')
 import Koa from 'koa'
+import Router from 'koa-router'
+import bodyParser from 'koa-bodyparser'
 
 const app = new Koa()
+const router = new Router()
 
+import { createAccount } from './api'
+
+app.use(bodyParser())
 app.use(async (ctx, next) => {
   try {
     await next()
@@ -12,8 +18,14 @@ app.use(async (ctx, next) => {
   }
 })
 
-app.use(async ctx => {
-  ctx.body = 'Hello world'
+app.use(async (ctx, next) => {
+  ctx.body = ctx.request.body
+  await next()
 })
 
-app.listen(3000)
+router.post('/account', createAccount)
+
+app.use(router.routes())
+app.use(router.allowedMethods())
+
+app.listen(3001)
