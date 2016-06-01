@@ -18,7 +18,10 @@ app.use(async (ctx, next) => {
     await next()
   } catch (err) {
     console.log('err', err)
-    ctx.body = { message: err.message }
+    ctx.body = {
+      status: 'error',
+      description: err.message
+    }
     ctx.status = err.status || 500
   }
 })

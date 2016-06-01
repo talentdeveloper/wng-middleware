@@ -13,5 +13,8 @@ export const Account = sequelize.define('account', {
     allowNull: false,
     unique: true
   },
-  secretPhrase: Sequelize.TEXT
+  secretPhrase: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  }
 })
