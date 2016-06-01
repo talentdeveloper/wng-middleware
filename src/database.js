@@ -3,7 +3,15 @@ const sequelize = new Sequelize('user-management', 'root', '')
 sequelize.sync()
 
 export const Account = sequelize.define('account', {
-  username: Sequelize.STRING,
-  email: Sequelize.STRING,
+  username: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true
+  },
   secretPhrase: Sequelize.TEXT
 })
