@@ -23,7 +23,7 @@ export const getAccount = async (ctx) => {
     if (!result) {
       ctx.body = {
         status: 'error',
-        description: 'User not found'
+        errorDescription: 'User not found'
       }
     } else {
       ctx.body = {
