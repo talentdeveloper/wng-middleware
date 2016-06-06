@@ -21,5 +21,9 @@ export const Account = sequelize.define('account', {
   secretPhrase: {
     type: Sequelize.TEXT,
     allowNull: false
+  },
+  accountRS: {
+    type: Sequelize.STRING,
+    allowNull: false
   }
 })
