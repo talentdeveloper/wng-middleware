@@ -7,7 +7,7 @@ export const isAdmin = async (ctx, next) => {
   const { token } = ctx.query
 
   if (!token || token.length !== 160) {
-    throw Error('Token invalid')
+    throw Error('Invalid token')
   }
 
   const parsedToken = parseToken(token, 'admin')
@@ -16,10 +16,5 @@ export const isAdmin = async (ctx, next) => {
     return await next()
   }
 
-  ctx.body = {
-    status: 'error',
-    errorDescription: 'Invalid token'
-  }
-
-  ctx.status = 500
+  throw Error('Invalid token')
 }
