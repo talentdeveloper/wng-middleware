@@ -8,6 +8,7 @@ const app = new Koa()
 const router = new Router()
 
 import { register, getAccount } from './api'
+import { checkAdmin } from './admin'
 
 app.use(cors())
 app.use(bodyParser())
