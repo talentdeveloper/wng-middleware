@@ -39,6 +39,9 @@ export const getAccounts = async (ctx) => {
   if (!limit) limit = 10
   if (!offset) offset = 0
 
+  limit = Number(limit)
+  offset = Number(offset)
+
   await Account.findAll({
     limit,
     offset

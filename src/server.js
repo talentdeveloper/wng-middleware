@@ -39,7 +39,7 @@ app.use(router.allowedMethods())
 app.use((ctx, next) => {
   ctx.body = {
     status: 'error',
-    description: 'Route not found'
+    errorDescription: 'Route not found'
   }
 })
 
