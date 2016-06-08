@@ -36,8 +36,8 @@ export const getAccount = async (ctx) => {
 
 export const getAccounts = async (ctx) => {
   let { limit, offset } = ctx.query
-  if (!limit) limit = 10
-  if (!offset) offset = 0
+  if (!limit || limit <= 0) limit = 10
+  if (!offset || offset < 0) offset = 0
 
   limit = Number(limit)
   offset = Number(offset)
@@ -46,16 +46,9 @@ export const getAccounts = async (ctx) => {
     limit,
     offset
   }).then(async (result) => {
-    if (!result.length) {
-      ctx.body = {
-        status: 'error',
-        errorDescription: 'No accounts found'
-      }
-    } else {
-      ctx.body = {
-        status: 'success',
-        accounts: result
-      }
+    ctx.body = {
+      status: 'success',
+      accounts: result
     }
   })
 }
