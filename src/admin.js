@@ -6,8 +6,8 @@ const { adminPublicKeys } = config
 export const isAdmin = async (ctx, next) => {
   const { token } = ctx.query
 
-  if (!token) {
-    throw Error('Token required')
+  if (!token || token.length !== 160) {
+    throw Error('Token invalid')
   }
 
   const parsedToken = parseToken(token, 'admin')
