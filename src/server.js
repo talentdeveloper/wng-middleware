@@ -7,8 +7,12 @@ import cors from 'koa-cors'
 const app = new Koa()
 const router = new Router()
 
-import { register, getAccount } from './api'
-import { checkAdmin } from './admin'
+import {
+  register,
+  getAccount,
+  getAccounts
+} from './api'
+import { isAdmin } from './admin'
 
 app.use(cors())
 app.use(bodyParser())
@@ -41,6 +45,7 @@ app.use((ctx, next) => {
 
 router.post('/register', register)
 router.get('/account', getAccount)
+router.get('/accounts', isAdmin, getAccounts)
 
 const port = process.env.PORT || 3001
 app.listen(port)

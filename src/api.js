@@ -33,3 +33,26 @@ export const getAccount = async (ctx) => {
     }
   })
 }
+
+export const getAccounts = async (ctx) => {
+  let { limit, offset } = ctx.query
+  if (!limit) limit = 10
+  if (!offset) offset = 0
+
+  await Account.findAll({
+    limit,
+    offset
+  }).then(async (result) => {
+    if (!result.length) {
+      ctx.body = {
+        status: 'error',
+        errorDescription: 'No users found'
+      }
+    } else {
+      ctx.body = {
+        status: 'success',
+        users: result
+      }
+    }
+  })
+}
