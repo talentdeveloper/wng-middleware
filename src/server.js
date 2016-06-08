@@ -45,6 +45,12 @@ app.use((ctx, next) => {
 
 router.post('/register', register)
 router.get('/account', getAccount)
+router.get('/is-admin', isAdmin, (ctx) => {
+  ctx.body = {
+    status: 'success',
+    isAdmin: true
+  }
+})
 router.get('/accounts', isAdmin, getAccounts)
 
 const port = process.env.PORT || 3001
