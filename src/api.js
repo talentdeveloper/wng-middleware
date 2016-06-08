@@ -28,7 +28,7 @@ export const getAccount = async (ctx) => {
     } else {
       ctx.body = {
         status: 'success',
-        user: result
+        account: result
       }
     }
   })
@@ -46,12 +46,12 @@ export const getAccounts = async (ctx) => {
     if (!result.length) {
       ctx.body = {
         status: 'error',
-        errorDescription: 'No users found'
+        errorDescription: 'No accounts found'
       }
     } else {
       ctx.body = {
         status: 'success',
-        users: result
+        accounts: result
       }
     }
   })
