@@ -42,13 +42,15 @@ export const getAccounts = async (ctx) => {
   limit = Number(limit)
   offset = Number(offset)
 
-  await Account.findAll({
+  await Account.findAndCountAll({
     limit,
-    offset
+    offset,
+    order: 'createdAt DESC'
   }).then(async (result) => {
     ctx.body = {
       status: 'success',
-      accounts: result
+      accounts: result.rows,
+      recordsTotal: result.count
     }
   })
 }
