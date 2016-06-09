@@ -7,7 +7,12 @@ import cors from 'koa-cors'
 const app = new Koa()
 const router = new Router()
 
-import { register, getAccount } from './api'
+import {
+  register,
+  getAccount,
+  getAccounts
+} from './api'
+import { isAdmin } from './admin'
 
 app.use(cors())
 app.use(bodyParser())
@@ -34,12 +39,19 @@ app.use(router.allowedMethods())
 app.use((ctx, next) => {
   ctx.body = {
     status: 'error',
-    description: 'Route not found'
+    errorDescription: 'Route not found'
   }
 })
 
 router.post('/register', register)
 router.get('/account', getAccount)
+router.get('/is-admin', isAdmin, (ctx) => {
+  ctx.body = {
+    status: 'success',
+    isAdmin: true
+  }
+})
+router.get('/accounts', isAdmin, getAccounts)
 
 const port = process.env.PORT || 3001
 app.listen(port)

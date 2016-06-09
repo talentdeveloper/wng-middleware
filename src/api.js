@@ -28,8 +28,29 @@ export const getAccount = async (ctx) => {
     } else {
       ctx.body = {
         status: 'success',
-        user: result
+        account: result
       }
+    }
+  })
+}
+
+export const getAccounts = async (ctx) => {
+  let { limit, offset } = ctx.query
+  if (!limit || limit <= 0) limit = 10
+  if (!offset || offset < 0) offset = 0
+
+  limit = Number(limit)
+  offset = Number(offset)
+
+  await Account.findAndCountAll({
+    limit,
+    offset,
+    order: 'createdAt DESC'
+  }).then(async (result) => {
+    ctx.body = {
+      status: 'success',
+      accounts: result.rows,
+      recordsTotal: result.count
     }
   })
 }

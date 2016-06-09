@@ -12,6 +12,7 @@
   "author": "Martijn Buurman",
   "license": "MIT",
   "dependencies": {
+    "big-integer": "^1.6.15",
     "koa": "^2.0.0",
     "koa-bodyparser": "^3.1.0",
     "koa-cors": "0.0.16",
