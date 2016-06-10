@@ -35,18 +35,44 @@ export const getAccount = async (ctx) => {
 }
 
 export const getAccounts = async (ctx) => {
-  let { limit, offset } = ctx.query
+  let { limit, offset, search } = ctx.query
   if (!limit || limit <= 0) limit = 10
   if (!offset || offset < 0) offset = 0
 
   limit = Number(limit)
   offset = Number(offset)
 
-  await Account.findAndCountAll({
+  const query = {
     limit,
     offset,
     order: 'createdAt DESC'
-  }).then(async (result) => {
+  }
+
+  if (search) {
+    query.where = {
+      username: {
+        $like: `${search}%`
+      }
+    }
+    query.where = {
+      $or: [{
+        username: {
+          $like: `${search}%`
+        }
+      }, {
+        email: {
+          $like: `${search}%`
+        }
+      }, {
+        accountRS: {
+          $like: `${search}%`
+        }
+      }
+    ]
+    }
+  }
+
+  await Account.findAndCountAll(query).then(async (result) => {
     ctx.body = {
       status: 'success',
       accounts: result.rows,
