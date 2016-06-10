@@ -57,6 +57,9 @@ export const hexStringToByteArray = (str) => {
   for (; i < str.length - 1; i += 2) {
     byteArray.push((charToNibble[str.charAt(i)] << 4) + charToNibble[str.charAt(i + 1)])
   }
+  if (byteArray.length < 5) {
+    byteArray.unshift(0)
+  }
   return byteArray
 }
 
