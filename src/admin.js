@@ -1,6 +1,6 @@
 import config from '../config.json'
-import { parseToken } from './crypto'
-
+import nxtCrypto from 'nxt-crypto'
+const { parseToken } = nxtCrypto
 const { adminPublicKeys } = config
 
 export const isAdmin = async (ctx, next) => {
