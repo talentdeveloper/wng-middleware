@@ -80,3 +80,9 @@ export const getAccounts = async (ctx) => {
     }
   })
 }
+
+export const getConstants = async (ctx) => {
+  ctx.body = {
+    walletVersion: '0.7.16'
+  }
+}

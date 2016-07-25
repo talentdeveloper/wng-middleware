@@ -10,7 +10,8 @@ const router = new Router()
 import {
   register,
   getAccount,
-  getAccounts
+  getAccounts,
+  getConstants
 } from './api'
 import { isAdmin } from './admin'
 
@@ -52,6 +53,7 @@ router.get('/is-admin', isAdmin, (ctx) => {
   }
 })
 router.get('/accounts', isAdmin, getAccounts)
+router.get('/constants', getConstants)
 
 const port = process.env.PORT || 3001
 app.listen(port)
