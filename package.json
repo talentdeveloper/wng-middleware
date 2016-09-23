@@ -1,6 +1,6 @@
 {
   "name": "user-management",
-  "version": "0.1.0",
+  "version": "0.4.1",
   "description": "OTDocs User Management",
   "main": "index.js",
   "scripts": {
