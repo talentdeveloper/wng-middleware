@@ -86,3 +86,9 @@ export const getConstants = async (ctx) => {
     walletVersion: '0.8.0'
   }
 }
+
+export const getAccountVerificationApplications = async (ctx) => {
+  ctx.body = {
+    hello: 'world'
+  }
+}

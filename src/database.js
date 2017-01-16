@@ -37,3 +37,23 @@ export const Account = sequelize.define('account', {
     allowNull: false
   }
 })
+
+export const AccountVerificationApplication =
+  sequelize.define('account_verification_application', {
+    accountRS: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    full_name: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    address: {
+      type: Sequelize.TEXT,
+      allowNull: false
+    },
+    comments: {
+      type: Sequelize.TEXT,
+      allowNull: true
+    }
+  })
