@@ -1,4 +1,4 @@
-import { Account } from './database'
+import { Account, AccountVerificationApplication } from './database'
 
 export const register = async (ctx) => {
   await Account.create({
@@ -87,8 +87,41 @@ export const getConstants = async (ctx) => {
   }
 }
 
+export const verifyAccount = async (ctx) => {
+  await AccountVerificationApplication.create({
+    ...ctx.body
+  }).then(async (result) => {
+    ctx.body = result
+  })
+}
+
 export const getAccountVerificationApplications = async (ctx) => {
-  ctx.body = {
-    hello: 'world'
+  let { limit, offset, search } = ctx.query
+  if (!limit || limit <= 0) limit = 10
+  if (!offset || offset < 0) offset = 0
+
+  limit = Number(limit)
+  offset = Number(offset)
+
+  const query = {
+    limit,
+    offset,
+    order: 'createdAt DESC'
   }
+
+  if (search) {
+    query.where = {
+      accountRS: {
+        $like: `${search}%`
+      }
+    }
+  }
+
+  await AccountVerificationApplication.findAndCountAll(query).then(async (result) => {
+    ctx.body = {
+      status: 'success',
+      accounts: result.rows,
+      recordsTotal: result.count
+    }
+  })
 }
