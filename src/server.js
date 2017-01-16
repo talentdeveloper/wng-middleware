@@ -13,6 +13,7 @@ import {
   getAccounts,
   getConstants,
   verifyAccount,
+  getAccountVerificationApplication,
   getAccountVerificationApplications
 } from './api'
 import { isAdmin } from './admin'
@@ -57,6 +58,7 @@ router.get('/is-admin', isAdmin, (ctx) => {
 router.get('/accounts', isAdmin, getAccounts)
 router.get('/constants', getConstants)
 router.post('/verify-account', verifyAccount)
+router.get('/account-verification-application', getAccountVerificationApplication)
 router.get('/account-verification-applications', getAccountVerificationApplications)
 
 const port = process.env.PORT || 3001

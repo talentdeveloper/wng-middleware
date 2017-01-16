@@ -95,6 +95,30 @@ export const verifyAccount = async (ctx) => {
   })
 }
 
+export const getAccountVerificationApplication = async (ctx) => {
+  const {
+    accountRS
+  } = ctx.query
+
+  await AccountVerificationApplication.findOne({
+    where: {
+      accountRS
+    }
+  }).then(async (result) => {
+    if (!result) {
+      ctx.body = {
+        status: 'error',
+        errorDescription: 'User not found'
+      }
+    } else {
+      ctx.body = {
+        status: 'success',
+        account: result
+      }
+    }
+  })
+}
+
 export const getAccountVerificationApplications = async (ctx) => {
   let { limit, offset, search } = ctx.query
   if (!limit || limit <= 0) limit = 10
