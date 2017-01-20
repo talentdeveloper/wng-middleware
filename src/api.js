@@ -87,7 +87,7 @@ export const getConstants = async (ctx) => {
   }
 }
 
-export const verifyAccount = async (ctx) => {
+export const createVerification = async (ctx) => {
   await AccountVerificationApplication.create({
     ...ctx.body
   }).then(async (result) => {
@@ -95,10 +95,10 @@ export const verifyAccount = async (ctx) => {
   })
 }
 
-export const getAccountVerificationApplication = async (ctx) => {
+export const hasVerification = async (ctx) => {
   const {
     accountRS
-  } = ctx.query
+  } = ctx.params
 
   await AccountVerificationApplication.findOne({
     where: {
@@ -108,7 +108,7 @@ export const getAccountVerificationApplication = async (ctx) => {
     if (!result) {
       ctx.body = {
         status: 'error',
-        errorDescription: 'User not found'
+        errorDescription: 'No verification application found'
       }
     } else {
       ctx.body = {
@@ -119,7 +119,7 @@ export const getAccountVerificationApplication = async (ctx) => {
   })
 }
 
-export const getAccountVerificationApplications = async (ctx) => {
+export const getVerifications = async (ctx) => {
   let { limit, offset, search } = ctx.query
   if (!limit || limit <= 0) limit = 10
   if (!offset || offset < 0) offset = 0
@@ -144,8 +144,27 @@ export const getAccountVerificationApplications = async (ctx) => {
   await AccountVerificationApplication.findAndCountAll(query).then(async (result) => {
     ctx.body = {
       status: 'success',
-      accounts: result.rows,
+      applications: result.rows,
       recordsTotal: result.count
+    }
+  })
+}
+
+export const updateAccountStatus = async (ctx) => {
+  const { id } = ctx.params
+  const {
+    status
+  } = ctx.body
+  console.log(id)
+  console.log(status)
+  await AccountVerificationApplication.update(
+    { status: status },
+    { where: { id } }
+  ).then(async (result) => {
+    console.log(result)
+    ctx.body = {
+      'status': 'success',
+      result
     }
   })
 }

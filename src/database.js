@@ -56,5 +56,9 @@ export const AccountVerificationApplication =
     comments: {
       type: Sequelize.TEXT,
       allowNull: true
+    },
+    status: {
+      type: Sequelize.STRING,
+      allowNull: true
     }
   })

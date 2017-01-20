@@ -12,9 +12,10 @@ import {
   getAccount,
   getAccounts,
   getConstants,
-  verifyAccount,
-  getAccountVerificationApplication,
-  getAccountVerificationApplications
+  createVerification,
+  updateAccountStatus,
+  hasVerification,
+  getVerifications
 } from './api'
 import { isAdmin } from './admin'
 
@@ -57,9 +58,12 @@ router.get('/is-admin', isAdmin, (ctx) => {
 })
 router.get('/accounts', isAdmin, getAccounts)
 router.get('/constants', getConstants)
-router.post('/verify-account', verifyAccount)
-router.get('/account-verification-application', getAccountVerificationApplication)
-router.get('/account-verification-applications', getAccountVerificationApplications)
+
+// verification routes
+router.post('/verification', createVerification)
+router.post('/admin/verification/:id/status', updateAccountStatus)
+router.get('/verification/:accountRS', hasVerification)
+router.get('/admin/verifications', isAdmin, getVerifications)
 
 const port = process.env.PORT || 3001
 app.listen(port)
