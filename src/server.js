@@ -17,7 +17,7 @@ import {
   hasVerification,
   getVerifications
 } from './api'
-import { isAdmin } from './admin'
+import { isAdmin, isAdminPost } from './admin'
 
 app.use(cors())
 app.use(bodyParser())
@@ -61,7 +61,7 @@ router.get('/constants', getConstants)
 
 // verification routes
 router.post('/verification', createVerification)
-router.post('/admin/verification/:id/status', updateAccountStatus)
+router.post('/admin/verification/:id/status', isAdminPost, updateAccountStatus)
 router.get('/verification/:accountRS', hasVerification)
 router.get('/admin/verifications', isAdmin, getVerifications)
 

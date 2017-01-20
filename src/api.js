@@ -155,13 +155,10 @@ export const updateAccountStatus = async (ctx) => {
   const {
     status
   } = ctx.body
-  console.log(id)
-  console.log(status)
   await AccountVerificationApplication.update(
     { status: status },
     { where: { id } }
   ).then(async (result) => {
-    console.log(result)
     ctx.body = {
       'status': 'success',
       result
