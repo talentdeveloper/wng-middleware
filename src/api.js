@@ -2,7 +2,7 @@ import { Account, AccountVerificationApplication } from './database'
 const s3 = require('s3')
 import asyncBusboy from 'async-busboy'
 import config from '../config.json'
-const { awsID, awsSecret } = config
+const { awsID, awsSecret, awsBucket } = config
 
 const client = s3.createClient({
   maxAsyncS3: 20,
@@ -104,22 +104,19 @@ export const getConstants = async (ctx) => {
 }
 
 export const createVerification = async (ctx) => {
-  console.log('create verification')
   const { files, fields } = await asyncBusboy(ctx.req)
-  console.log(files)
-  console.log(fields)
-  let key
-  if (fields.accountRS && fields.type) {
-    key = `${fields.accountRS}/${fields.type}`
+  let accountRS
+  if (fields.accountRS) {
+    accountRS = fields.accountRS
   }
   files.map((file) => {
     const path = file.path
-    const name = file.filename
+    const name = file.fieldname
     const params = {
       localFile: path,
       s3Params: {
-        Bucket: 'middleware-kyc-storage-dev',
-        Key: `${key}/${name}`
+        Bucket: awsBucket,
+        Key: `${accountRS}/${name}`
       }
     }
     const uploader = client.uploadFile(params)
