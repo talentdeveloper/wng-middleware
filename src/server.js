@@ -18,6 +18,7 @@ import {
   getVerifications
 } from './api'
 import { isAdmin, isAdminPost } from './admin'
+import { isAccountRS } from './user'
 
 app.use(cors())
 app.use(bodyParser())
@@ -62,7 +63,7 @@ router.get('/constants', getConstants)
 // verification routes
 router.post('/verification', createVerification)
 router.post('/admin/verification/:id/status', isAdminPost, updateAccountStatus)
-router.get('/verification/:accountRS', hasVerification)
+router.get('/verification/:accountRS', isAccountRS, hasVerification)
 router.get('/admin/verifications', isAdmin, getVerifications)
 
 const port = process.env.PORT || 3001
