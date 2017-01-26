@@ -60,5 +60,9 @@ export const AccountVerificationApplication =
     status: {
       type: Sequelize.STRING,
       allowNull: true
+    },
+    files: {
+      type: Sequelize.TEXT,
+      allowNull: true
     }
   })

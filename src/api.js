@@ -106,26 +106,30 @@ export const getConstants = async (ctx) => {
 export const createVerification = async (ctx) => {
   const { files, fields } = await asyncBusboy(ctx.req)
   let accountRS
+  let filePath
+  const filesArray = []
   if (fields.accountRS) {
     accountRS = fields.accountRS
   }
   files.map((file) => {
     const path = file.path
     const name = file.fieldname
+    filePath = `${accountRS}/${name}`
     const params = {
       localFile: path,
       s3Params: {
         Bucket: awsBucket,
-        Key: `${accountRS}/${name}`
+        Key: filePath
       }
     }
+    filesArray.push(name)
     const uploader = client.uploadFile(params)
     uploader.on('end', function (data) {
       console.log('done uploading')
       console.log(data)
     })
   })
-
+  fields.files = filesArray.join()
   await AccountVerificationApplication.create(fields, {}).then(async (result) => {
     ctx.body = result
   })
@@ -178,10 +182,12 @@ export const getVerifications = async (ctx) => {
   }
 
   await AccountVerificationApplication.findAndCountAll(query).then(async (result) => {
+    const url = `https://${awsBucket}.s3.amazonaws.com/`
     ctx.body = {
       status: 'success',
       applications: result.rows,
-      recordsTotal: result.count
+      recordsTotal: result.count,
+      publicURL: url
     }
   })
 }
