@@ -143,7 +143,10 @@ export const hasVerification = async (ctx) => {
   await AccountVerificationApplication.findOne({
     where: {
       accountRS
-    }
+    },
+    order: [
+      ['createdAt', 'DESC']
+    ]
   }).then(async (result) => {
     if (!result) {
       ctx.body = {

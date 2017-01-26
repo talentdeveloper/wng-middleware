@@ -42,8 +42,7 @@ export const AccountVerificationApplication =
   sequelize.define('account_verification_application', {
     accountRS: {
       type: Sequelize.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     full_name: {
       type: Sequelize.STRING,
