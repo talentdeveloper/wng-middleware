@@ -1,19 +1,13 @@
 import { Account, AccountVerificationApplication } from './database'
-const s3 = require('s3')
 import asyncBusboy from 'async-busboy'
 import config from '../config.json'
 const { awsID, awsSecret, awsBucket } = config
+import AWS from 'aws-sdk'
 
-const client = s3.createClient({
-  maxAsyncS3: 20,
-  s3RetryCount: 3,
-  s3RetryDelay: 1000,
-  multipartUploadThreshold: 20971520,
-  multipartUploadSize: 15728640,
-  s3Options: {
-    accessKeyId: awsID,
-    secretAccessKey: awsSecret
-  }
+const S3Client = new AWS.S3({
+  accessKeyId: awsID,
+  secretAccessKey: awsSecret,
+  maxRetries: 3
 })
 
 export const register = async (ctx) => {
@@ -112,21 +106,16 @@ export const createVerification = async (ctx) => {
     accountRS = fields.accountRS
   }
   files.map((file) => {
-    const path = file.path
     const name = file.fieldname
     filePath = `${accountRS}/${name}`
     const params = {
-      localFile: path,
-      s3Params: {
-        Bucket: awsBucket,
-        Key: filePath
-      }
+      Bucket: awsBucket,
+      Key: filePath,
+      Body: file
     }
     filesArray.push(name)
-    const uploader = client.uploadFile(params)
-    uploader.on('end', function (data) {
-      console.log('done uploading')
-      console.log(data)
+    S3Client.upload(params, {}, function (err, data) {
+      console.log(err, data)
     })
   })
   fields.files = filesArray.join()
