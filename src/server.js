@@ -66,7 +66,7 @@ router.post('/verification', createVerification)
 router.post('/admin/verification/:id/status', isAdminPost, updateAccountStatus)
 router.get('/verification/:accountRS', isAccountRS, hasVerification)
 router.get('/admin/verifications', isAdmin, getVerifications)
-router.get('/verification/img/:accountRS/:file', getEncryptedVerification)
+router.get('/verification/img/:accountRS/:file', isAdmin, getEncryptedVerification)
 
 const port = process.env.PORT || 3001
 app.listen(port)
