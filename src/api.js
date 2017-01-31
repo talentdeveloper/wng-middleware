@@ -133,14 +133,18 @@ export const createVerification = async (ctx) => {
 export const getEncryptedVerification = async (ctx) => {
   const { accountRS, file } = ctx.params
   const filePath = `${accountRS}/${file}`
-  S3Client.getObject({
+  const params = {
     Bucket: awsBucket,
     Key: filePath,
     SSECustomerAlgorithm: 'AES256',
     SSECustomerKey: aesKey
-  }, (err, data) => {
-    if (err) return console.error(err.stack)
-    console.log(data)
+  }
+  const getObjectPromise = S3Client.getObject(params).promise()
+  await getObjectPromise.then(function (data) {
+    ctx.set('Content-Type', 'application/octet-stream')
+    ctx.body = data.Body
+  }).catch(function (err) {
+    console.log(err)
   })
 }
 
