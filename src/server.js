@@ -15,7 +15,8 @@ import {
   createVerification,
   updateAccountStatus,
   hasVerification,
-  getVerifications
+  getVerifications,
+  getEncryptedVerification
 } from './api'
 import { isAdmin, isAdminPost } from './admin'
 import { isAccountRS } from './user'
@@ -65,6 +66,7 @@ router.post('/verification', createVerification)
 router.post('/admin/verification/:id/status', isAdminPost, updateAccountStatus)
 router.get('/verification/:accountRS', isAccountRS, hasVerification)
 router.get('/admin/verifications', isAdmin, getVerifications)
+router.get('/verification/img/:accountRS/:file', getEncryptedVerification)
 
 const port = process.env.PORT || 3001
 app.listen(port)

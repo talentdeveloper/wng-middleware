@@ -1,7 +1,8 @@
 import { Account, AccountVerificationApplication } from './database'
 import asyncBusboy from 'async-busboy'
 import config from '../config.json'
-const { awsID, awsSecret, awsBucket } = config
+const { awsID, awsSecret, awsBucket, awsMasterKey } = config
+const aesKey = Buffer.alloc(32, awsMasterKey)
 import AWS from 'aws-sdk'
 
 const S3Client = new AWS.S3({
@@ -111,7 +112,12 @@ export const createVerification = async (ctx) => {
     const params = {
       Bucket: awsBucket,
       Key: filePath,
-      Body: file
+      Body: file,
+      SSECustomerAlgorithm: 'AES256',
+      SSECustomerKey: aesKey,
+      Metadata: {
+        Account: accountRS
+      }
     }
     filesArray.push(name)
     S3Client.upload(params, {}, function (err, data) {
@@ -121,6 +127,20 @@ export const createVerification = async (ctx) => {
   fields.files = filesArray.join()
   await AccountVerificationApplication.create(fields, {}).then(async (result) => {
     ctx.body = result
+  })
+}
+
+export const getEncryptedVerification = async (ctx) => {
+  const { accountRS, file } = ctx.params
+  const filePath = `${accountRS}/${file}`
+  S3Client.getObject({
+    Bucket: awsBucket,
+    Key: filePath,
+    SSECustomerAlgorithm: 'AES256',
+    SSECustomerKey: aesKey
+  }, (err, data) => {
+    if (err) return console.error(err.stack)
+    console.log(data)
   })
 }
 
