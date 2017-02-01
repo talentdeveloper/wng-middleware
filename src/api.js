@@ -116,7 +116,8 @@ export const createVerification = async (ctx) => {
       SSECustomerAlgorithm: 'AES256',
       SSECustomerKey: aesKey,
       Metadata: {
-        Account: accountRS
+        Account: accountRS,
+        MimeType: file.mimeType
       }
     }
     filesArray.push(name)
@@ -141,7 +142,11 @@ export const getEncryptedVerification = async (ctx) => {
   }
   const getObjectPromise = S3Client.getObject(params).promise()
   await getObjectPromise.then(function (data) {
-    ctx.set('Content-Type', 'application/octet-stream')
+    if (data.Metadata && data.Metadata.mimetype) {
+      ctx.set('Content-Type', data.Metadata.mimetype)
+    } else {
+      ctx.set('Content-Type', 'application/octet-stream')
+    }
     ctx.body = data.Body
   }).catch(function (err) {
     console.log(err)
@@ -198,12 +203,10 @@ export const getVerifications = async (ctx) => {
   }
 
   await AccountVerificationApplication.findAndCountAll(query).then(async (result) => {
-    const url = `https://${awsBucket}.s3.amazonaws.com/`
     ctx.body = {
       status: 'success',
       applications: result.rows,
-      recordsTotal: result.count,
-      publicURL: url
+      recordsTotal: result.count
     }
   })
 }
