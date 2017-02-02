@@ -1,3 +1,3 @@
-# OTDocs User Management
+# Middleware
 
-User Management system for OTDocs projects
+User Management system for DeBuNe projects

@@ -11,9 +11,15 @@ import {
   register,
   getAccount,
   getAccounts,
-  getConstants
+  getConstants,
+  createVerification,
+  updateAccountStatus,
+  hasVerification,
+  getVerifications,
+  getEncryptedVerification
 } from './api'
-import { isAdmin } from './admin'
+import { isAdmin, isAdminPost } from './admin'
+import { isAccountRS } from './user'
 
 app.use(cors())
 app.use(bodyParser())
@@ -54,6 +60,13 @@ router.get('/is-admin', isAdmin, (ctx) => {
 })
 router.get('/accounts', isAdmin, getAccounts)
 router.get('/constants', getConstants)
+
+// verification routes
+router.post('/verification', createVerification)
+router.post('/admin/verification/:id/status', isAdminPost, updateAccountStatus)
+router.get('/verification/:accountRS', isAccountRS, hasVerification)
+router.get('/admin/verifications', isAdmin, getVerifications)
+router.get('/verification/img/:accountRS/:file', isAdmin, getEncryptedVerification)
 
 const port = process.env.PORT || 3001
 app.listen(port)
